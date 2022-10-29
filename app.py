@@ -8,7 +8,7 @@ import websockets
 
 async def handler(websocket):
 
-    message = "Connected to server!"
+    message = "Edgar puto!"
 
     await websocket.send(message)
 
