@@ -1,19 +1,13 @@
 import asyncio
+import signal
+import os
 
 import websockets
 
-import os
 
-# create handler for each connection
-
-
-async def handler(websocket, path):
-
-    data = await websocket.recv()
-
-    reply = f"Data recieved as:  {data}!"
-
-    await websocket.send(reply)
+async def echo(websocket):
+    async for message in websocket:
+        await websocket.send(message)
 
 
 async def main():
@@ -22,7 +16,11 @@ async def main():
     stop = loop.create_future()
     loop.add_signal_handler(signal.SIGTERM, stop.set_result, None)
 
-    async with websockets.serve(handler, host="", port=int(os.environ["PORT"])):
+    async with websockets.serve(
+        echo,
+        host="",
+        port=int(os.environ["PORT"]),
+    ):
         await stop
 
 
