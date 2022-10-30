@@ -10,14 +10,14 @@ from SortingAlgorithms import *
 
 async def handler(websocket):
 
-    async for request in websocket:
+    request = await websocket.recv()
+
+    async for message in websocket:
 
         algorithms = {"Mergesort": merge_sort,
                       "Heapsort": heap_sort,
                       "QuicksortRight": quick_sort_right,
                       "QuicksortLeft": quick_sort_left}
-
-        request = await websocket.recv()
 
         data = json.loads(request)
 
