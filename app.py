@@ -10,7 +10,7 @@ from SortingAlgorithms import *
 
 async def handler(websocket):
 
-    async for request in websocket:
+    while True:
 
         request = await websocket.recv()
 
@@ -23,11 +23,9 @@ async def handler(websocket):
         array = data["array"]
         algorithm = algorithms[data["algorithm"]]
 
-        async for message in websocket:
+        message = json.dumps({"array": algorithm(array)})
 
-            message = json.dumps({"array": algorithm(array)})
-
-            await websocket.send(message)
+        await websocket.send(message)
 
 
 async def main():
