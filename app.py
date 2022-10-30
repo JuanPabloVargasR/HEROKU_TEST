@@ -20,6 +20,11 @@ async def handler(websocket):
                       "QuicksortLeft": quick_sort_left}
 
         data = json.loads(request)
+
+        await websocket.send("1")
+        await websocket.send("2")
+        await websocket.send("3")
+
         array = data["array"]
         algorithm = algorithms[data["algorithm"]]
 
