@@ -10,7 +10,7 @@ from SortingAlgorithms import *
 
 async def handler(websocket):
 
-    async for message in websocket:
+    async for request in websocket:
 
         algorithms = {"Mergesort": merge_sort,
                       "Heapsort": heap_sort,
