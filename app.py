@@ -1,15 +1,24 @@
 import asyncio
 import signal
 import os
-
+import json
 
 import websockets
+
+from SortingAlgorithms import *
 
 
 async def handler(websocket):
 
     async for message in websocket:
-        message = "Edgar puto!"
+        request = await websocket.recv()
+
+        data = json.loads(request)
+
+        array = data["array"]
+        # algorithm = data["algorithm"]
+
+        message = json.dumps({"array": merge_sort(array)})
         await websocket.send(message)
 
 
