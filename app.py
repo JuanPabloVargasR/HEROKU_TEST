@@ -21,9 +21,7 @@ async def handler(websocket):
 
         data = json.loads(request)
 
-        await websocket.send("1")
-        await websocket.send("2")
-        await websocket.send("3")
+        await websocket.send(string(websocket))
 
         array = data["array"]
         algorithm = algorithms[data["algorithm"]]
