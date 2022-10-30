@@ -10,12 +10,11 @@ from SortingAlgorithms import *
 
 async def handler(websocket):
 
-    async for message in websocket:
+    request = await websocket.recv()
 
-        request = await websocket.recv()
+    message = "Edgar puto !"
 
-        message = "Edgar puto !"
-        await websocket.send(message)
+    await websocket.send(message)
 
 
 async def main():
