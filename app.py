@@ -8,9 +8,9 @@ import websockets
 
 async def handler(websocket):
 
-    message = "Edgar puto!"
-
-    await websocket.send(message)
+    async for message in websocket:
+        message = "Edgar puto!"
+        await websocket.send(message)
 
 
 async def main():
