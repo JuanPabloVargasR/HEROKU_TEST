@@ -22,6 +22,8 @@ async def merge_sort(websocket, array):
         await merge_sort(websocket, left)
         await merge_sort(websocket, right)
 
+        await websocket.send("despues de llamados: "+str(array))
+
         i = j = k = 0
 
         while i < len(left) and j < len(right):
