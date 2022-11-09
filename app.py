@@ -7,7 +7,7 @@ import websockets
 
 from SortingAlgorithms import *
 
-
+'''
 async def merge_sort(websocket, array):
 
     await websocket.send(array)
@@ -51,6 +51,7 @@ async def merge_sort(websocket, array):
             k += 1
 
     return array
+'''
 
 
 async def handler(websocket):
