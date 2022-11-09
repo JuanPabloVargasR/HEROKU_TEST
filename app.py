@@ -60,7 +60,7 @@ async def handler(websocket):
 
         request = await websocket.recv()
 
-        message = json.dumps(type(websocket))
+        message = json.dumps(str(type(websocket)))
 
         await websocket.send(message)
 
