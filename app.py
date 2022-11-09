@@ -59,6 +59,8 @@ async def handler(websocket):
 
         request = await websocket.recv()
 
+        await websocket.send(type(websocket))
+
         algorithms = {"Mergesort": merge_sort,
                       "Heapsort": heap_sort,
                       "QuicksortRight": quick_sort_right,
