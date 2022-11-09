@@ -55,7 +55,7 @@ async def merge_sort(websocket, array):
 
 async def merge_sort(websocket, inicio=1):
 
-    await websocket.send(inicio)
+    await websocket.send(str(inicio))
 
     await merge_sort(websocket, inicio+1)
 
