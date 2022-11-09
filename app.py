@@ -10,9 +10,9 @@ from SortingAlgorithms import *
 
 async def merge_sort(websocket, array):
 
-    await websocket.send(str(array))
-
     if len(array) > 1:
+
+        await websocket.send("array inicial: "+str(array))
 
         mid = len(array) // 2
 
@@ -38,17 +38,25 @@ async def merge_sort(websocket, array):
 
             k += 1
 
+            await websocket.send(str(array))
+
         while i < len(left):
 
             array[k] = left[i]
             i += 1
             k += 1
 
+            await websocket.send(str(array))
+
         while j < len(right):
 
             array[k] = right[j]
             j += 1
             k += 1
+
+            await websocket.send(str(array))
+
+    await websocket.send("array final: "+str(array))
 
     return array
 
