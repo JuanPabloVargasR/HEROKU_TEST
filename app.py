@@ -8,6 +8,51 @@ import websockets
 from SortingAlgorithms import *
 
 
+async def merge_sort(websocket, array):
+
+    await websocket.send(array)
+
+    if len(array) > 1:
+
+        mid = len(array) // 2
+
+        left = array[:mid]
+        right = array[mid:]
+
+        await merge_sort(left)
+        await merge_sort(right)
+
+        i = j = k = 0
+
+        while i < len(left) and j < len(right):
+
+            if left[i] < right[j]:
+
+                array[k] = left[i]
+                i += 1
+
+            else:
+
+                array[k] = right[j]
+                j += 1
+
+            k += 1
+
+        while i < len(left):
+
+            array[k] = left[i]
+            i += 1
+            k += 1
+
+        while j < len(right):
+
+            array[k] = right[j]
+            j += 1
+            k += 1
+
+    return array
+
+
 async def handler(websocket):
 
     while True:
@@ -24,7 +69,7 @@ async def handler(websocket):
         array = data["array"]
         algorithm = algorithms[data["algorithm"]]
 
-        message = json.dumps({"array": algorithm(array)})
+        message = json.dumps({"array": algorithm(websocket, array)})
 
         await websocket.send(message)
 
