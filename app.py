@@ -10,7 +10,7 @@ from SortingAlgorithms import *
 
 async def merge_sort(websocket, array):
 
-    await websocket.send(array)
+    await websocket.send(str(array))
 
     if len(array) > 1:
 
