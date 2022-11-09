@@ -63,6 +63,8 @@ async def handler(websocket):
 
         await websocket.send(message)
 
+        '''
+
         algorithms = {"Mergesort": merge_sort,
                       "Heapsort": heap_sort,
                       "QuicksortRight": quick_sort_right,
@@ -76,6 +78,7 @@ async def handler(websocket):
         message = json.dumps({"array": algorithm(websocket, array)})
 
         await websocket.send(message)
+        '''
 
 
 async def main():
