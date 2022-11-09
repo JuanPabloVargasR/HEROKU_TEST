@@ -53,13 +53,6 @@ async def merge_sort(websocket, array):
     return array
 
 
-async def merge_sort(websocket, inicio=1):
-
-    await websocket.send(str(inicio))
-
-    await merge_sort(websocket, inicio+1)
-
-
 async def handler(websocket):
 
     while True:
@@ -76,11 +69,9 @@ async def handler(websocket):
         array = data["array"]
         algorithm = algorithms[data["algorithm"]]
 
-        await merge_sort(websocket)
+        message = json.dumps({"array": await algorithm(websocket, array)})
 
-        #message = json.dumps({"array": algorithm(websocket, array)})
-
-        # await websocket.send(message)
+        await websocket.send(message)
 
 
 async def main():
