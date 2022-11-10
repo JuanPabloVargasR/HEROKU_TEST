@@ -176,7 +176,7 @@ async def quick_sort_left(websocket, arr: list):
             # split the array into two parts and get the position where the array is split
             pi = await partition(arr, low, high)
             # sends the partitions to the client
-            await websocket.send(json.dumps({"message": f"left: {arr[:pi]}, right: {arr[pi + 1:]}"}))
+            await websocket.send(json.dumps({"message": f"left: {arr[low:pi+1]}, right: {arr[pi+1:high]}"}))
             # recursively sort the left and right halves
             await quick_sort_helper(arr, low, pi - 1)
             await quick_sort_helper(arr, pi + 1, high)
