@@ -103,7 +103,7 @@ async def heap_sort(websocket, arr: list):
     # extract the root which is the largest element and swap it with the last element not yet sorted
     for i in range(n - 1, 0, -1):
         # sends a message to the client with the swapped elements
-        websocket.send(json.dumps(
+        await websocket.send(json.dumps(
             {"message": f"extracting root {arr[0]} and swapping with {arr[i]}"}))
         arr[i], arr[0] = arr[0], arr[i]
         # sends a message to the client with the sorted elements
