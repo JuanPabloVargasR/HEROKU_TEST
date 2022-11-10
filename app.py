@@ -107,13 +107,13 @@ async def heap_sort(websocket, arr: list):
             {"message": f"extracting root {arr[0]} and swapping with {arr[i]}"}))
         arr[i], arr[0] = arr[0], arr[i]
         # sends a message to the client with the sorted elements
-        await websocket.send(json.dumps({"message": f"sorted elements: {arr[:i]}"}))
+        await websocket.send(json.dumps({"message": f"sorted elements: {arr[i:]}"}))
         # sends a message to the client with the unsorted elements to heapify
-        await websocket.send(json.dumps({"message": f"heapify {arr[i:]}"}))
+        await websocket.send(json.dumps({"message": f"heapify {arr[:i]}"}))
         # discard the sorted element from the heap and heapify the new root
         await heapify(arr, i, 0)
         # sends a message to the client with the new max heap
-        await websocket.send(json.dumps({"message": f"max heap created: {arr[i:]}"}))
+        await websocket.send(json.dumps({"message": f"max heap created: {arr[:i]}"}))
 
 
 async def handler(websocket):
