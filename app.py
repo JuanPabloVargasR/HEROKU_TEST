@@ -19,7 +19,8 @@ async def merge_sort(websocket, array):
         left = array[:mid]
         right = array[mid:]
 
-        await websocket.send(f"array: {array}, left: {left}, right: {right}")
+        # sends the partitions to the client
+        await websocket.send(json.dumps({"message": f"array: {array}, left: {left}, right: {right}"}))
 
         # recursively sort the left and right halves
         await merge_sort(websocket, left)
@@ -57,7 +58,8 @@ async def merge_sort(websocket, array):
             j += 1
             k += 1
 
-        await websocket.send(f"izquierda: {left}, derecha: {right}, merge: {array}")
+        # sends the merged array to the client
+        await websocket.send(json.dumps({"message": f"left: {left}, right: {right}, merge: {array}"}))
 
 
 async def handler(websocket):
