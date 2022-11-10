@@ -137,7 +137,7 @@ async def quick_sort_right(websocket, arr: list):
         # stop the recursion when the partition is empty or has only one element
         if low < high:
             # sends a message to the client with the array to be partitioned
-            await websocket.send(json.dumps({"message": f"array: {arr}, pivot: {arr[high]}"}))
+            await websocket.send(json.dumps({"message": f"array: {arr[low:high+1]}, pivot: {arr[high]}"}))
             # split the array into two parts and get the position where the array is split
             pi = await partition(arr, low, high)
             # sends the partitions to the client
@@ -172,7 +172,7 @@ async def quick_sort_left(websocket, arr: list):
         # stop the recursion when the partition is empty or has only one element
         if low < high:
             # sends a message to the client with the array to be partitioned
-            await websocket.send(json.dumps({"message": f"array: {arr}, pivot: {arr[low]}"}))
+            await websocket.send(json.dumps({"message": f"array: {arr[low:high+1]}, pivot: {arr[low]}"}))
             # split the array into two parts and get the position where the array is split
             pi = await partition(arr, low, high)
             # sends the partitions to the client
