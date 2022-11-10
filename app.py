@@ -26,41 +26,28 @@ async def merge_sort(websocket, array):
 
         i = j = k = 0
 
+        # Copy data to temp arrays left and right
         while i < len(left) and j < len(right):
-
             if left[i] < right[j]:
-
                 array[k] = left[i]
                 i += 1
-
             else:
-
                 array[k] = right[j]
                 j += 1
-
             k += 1
 
-            await websocket.send(str(array))
-
+        # Checking if any element was left
         while i < len(left):
-
             array[k] = left[i]
             i += 1
             k += 1
 
-            await websocket.send(str(array))
-
         while j < len(right):
-
             array[k] = right[j]
             j += 1
             k += 1
 
-            await websocket.send(str(array))
-
     await websocket.send("array final: "+str(array))
-
-    return array
 
 
 async def handler(websocket):
