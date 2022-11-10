@@ -12,31 +12,41 @@ async def merge_sort(websocket, array):
 
     if len(array) > 1:
 
-        await websocket.send("array inicial: "+str(array))
-
+        # middle of the array
         mid = len(array) // 2
 
+        # partitions the array into two halves (left and right)
         left = array[:mid]
         right = array[mid:]
 
+        await websocket.send(f"array: {array}, left: {left}, right: {right}")
+
+        # recursively sort the left and right halves
         await merge_sort(websocket, left)
         await merge_sort(websocket, right)
 
-        await websocket.send("despues de llamados: "+str(array))
-
+        # i is the index of the left array, j is the index of the right array, k is the index of the merged array
         i = j = k = 0
 
-        # Copy data to temp arrays left and right
+        # while there are elements in both left and right arrays
         while i < len(left) and j < len(right):
+            # if the left element is smaller than the right element
             if left[i] < right[j]:
+                # set the left element to the merged array
                 array[k] = left[i]
+                # increment the index of the left array
                 i += 1
+            # else if the right element is smaller than the left element (or they are equal)
             else:
+                # set the right element to the merged array
                 array[k] = right[j]
+                # increment the index of the right array
                 j += 1
+            # increment the index of the merged array
             k += 1
 
-        # Checking if any element was left
+        # one of the arrays has been fully merged, so we add the remaining elements of the other array to the merged array
+        # it is safe to assume that the remaining elements are already sorted and that they are greater than the last element of the merged array
         while i < len(left):
             array[k] = left[i]
             i += 1
@@ -47,7 +57,7 @@ async def merge_sort(websocket, array):
             j += 1
             k += 1
 
-    await websocket.send("array final: "+str(array))
+        await websocket.send(f"izquierda: {left}, derecha: {right}, merge: {array}")
 
 
 async def handler(websocket):
@@ -66,7 +76,9 @@ async def handler(websocket):
         array = data["array"]
         algorithm = algorithms[data["algorithm"]]
 
-        message = json.dumps({"array": await algorithm(websocket, array)})
+        await algorithm(websocket, array)
+
+        message = json.dumps({"array": array})
 
         await websocket.send(message)
 
