@@ -134,10 +134,10 @@ async def quick_sort_right(websocket, arr: list):
         return (i + 1)
 
     async def quick_sort_helper(arr: list, low: int, high: int):
-        # stop the recursion when the partition is of size 1 which means the array is sorted
+        # stop the recursion when the partition is empty or has only one element
         if low < high:
             # sends a message to the client with the array to be partitioned
-            await websocket.send(json.dumps({"message": f"array: {arr}"}))
+            await websocket.send(json.dumps({"message": f"array: {arr}, pivot: {arr[high]}"}))
             # split the array into two parts and get the position where the array is split
             pi = await partition(arr, low, high)
             # sends the partitions to the client
@@ -169,12 +169,14 @@ async def quick_sort_left(websocket, arr: list):
         return i
 
     async def quick_sort_helper(arr: list, low: int, high: int):
-        # stop the recursion when the partition is of size 1 which means the array is sorted
+        # stop the recursion when the partition is empty or has only one element
         if low < high:
+            # sends a message to the client with the array to be partitioned
+            await websocket.send(json.dumps({"message": f"array: {arr}, pivot: {arr[low]}"}))
             # split the array into two parts and get the position where the array is split
             pi = await partition(arr, low, high)
             # sends the partitions to the client
-            await websocket.send(json.dumps({"message": f"array: {arr}, left partition: {arr[:pi]}, right partition: {arr[pi + 1:]}"}))
+            await websocket.send(json.dumps({"message": f"left: {arr[:pi]}, right: {arr[pi + 1:]}"}))
             # recursively sort the left and right halves
             await quick_sort_helper(arr, low, pi - 1)
             await quick_sort_helper(arr, pi + 1, high)
