@@ -63,42 +63,57 @@ async def merge_sort(websocket, array: list):
 
 
 async def heap_sort(websocket, arr: list):
+
     async def heapify(arr: list, n: int, i: int):
+
         # initialy assume the largest element is the root
         largest = i
         # the left child of the root is in the position 2 * i + 1 if it exists
         l = 2 * i + 1
         # the right child of the root is in the position 2 * i + 2 if it exists
         r = 2 * i + 2
+
         # if the left child exists and is greater than the root
         if l < n and arr[i] < arr[l]:
             # set the left child as the largest element
             largest = l
+
         # if the right child exists and is greater than the largest element
         if r < n and arr[largest] < arr[r]:
             # set the right child as the largest element
             largest = r
+
         # if the largest element was not the root
         if largest != i:
             # swap the largest element with the root
             arr[i], arr[largest] = arr[largest], arr[i]
             # recursively heapify the affected sub-tree (the position from which the largest element was swapped)
             await heapify(arr, n, largest)
+
     # length of the array
     n = len(arr)
+
     # build a max heap by heapifying the non-leaf nodes
     for i in range(n//2, -1, -1):
         await heapify(arr, n, i)
-    websocket.send(json.dumps({"message": f"heap created: {arr}"}))
+
+    # sends the max heap to the client
+    await websocket.send(json.dumps({"message": f"max heap created: {arr}"}))
+
     # extract the root which is the largest element and swap it with the last element not yet sorted
     for i in range(n - 1, 0, -1):
+        # sends a message to the client with the swapped elements
         websocket.send(json.dumps(
             {"message": f"extracting root {arr[0]} and swapping with {arr[i]}"}))
         arr[i], arr[0] = arr[0], arr[i]
-        websocket.send(json.dumps({"message": f"sorted elements: {arr[:i]}"}))
-        websocket.send(json.dumps({"message": f"heapify {arr[i:]}"}))
+        # sends a message to the client with the sorted elements
+        await websocket.send(json.dumps({"message": f"sorted elements: {arr[:i]}"}))
+        # sends a message to the client with the unsorted elements to heapify
+        await websocket.send(json.dumps({"message": f"heapify {arr[i:]}"}))
         # discard the sorted element from the heap and heapify the new root
         await heapify(arr, i, 0)
+        # sends a message to the client with the new max heap
+        await websocket.send(json.dumps({"message": f"max heap created: {arr[i:]}"}))
 
 
 async def handler(websocket):
