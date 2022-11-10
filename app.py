@@ -5,8 +5,6 @@ import json
 
 import websockets
 
-from SortingAlgorithms import quick_sort_left, quick_sort_right
-
 
 async def merge_sort(websocket, array: list):
 
@@ -114,6 +112,72 @@ async def heap_sort(websocket, arr: list):
         await heapify(arr, i, 0)
         # sends a message to the client with the new max heap
         await websocket.send(json.dumps({"message": f"max heap created: {arr[:i]}"}))
+
+
+async def quick_sort_right(websocket, arr: list):
+    async def partition(arr: list, low: int, high: int) -> int:
+        # i is the position of the last element that is smaller than the pivot
+        i = (low - 1)
+        # pivot is the last element of the array
+        pivot = arr[high]
+        # iterate through the array from the first element to the penultimate element
+        for j in range(low, high):
+            # if the current element is smaller than the pivot
+            if arr[j] <= pivot:
+                # increment the position of the last element that is smaller than the pivot
+                i = i + 1
+                # swap the current element with the position of the last element that is smaller than the pivot
+                arr[i], arr[j] = arr[j], arr[i]
+        # swap the pivot with the first element that is greater than the pivot
+        arr[i + 1], arr[high] = arr[high], arr[i + 1]
+        # return the position of the pivot
+        return (i + 1)
+
+    async def quick_sort_helper(arr: list, low: int, high: int):
+        # stop the recursion when the partition is of size 1 which means the array is sorted
+        if low < high:
+            # split the array into two parts and get the position where the array is split
+            pi = await partition(arr, low, high)
+            # sends the partitions to the client
+            await websocket.send(json.dumps({"message": f"array: {arr}, left: {arr[:pi]}, right: {arr[pi + 1:]}"}))
+            # recursively sort the left and right halves
+            await quick_sort_helper(arr, low, pi - 1)
+            await quick_sort_helper(arr, pi + 1, high)
+    # call the helper function for the entire array
+    await quick_sort_helper(arr, 0, len(arr) - 1)
+
+
+async def quick_sort_left(websocket, arr: list):
+    async def partition(arr: list, low: int, high: int) -> int:
+        # i is the position of the last element that is smaller than the pivot
+        i = low
+        # pivot is the first element of the array
+        pivot = arr[low]
+        # iterate through the array from the second element to the last element
+        for j in range(low + 1, high + 1):
+            # if the current element is smaller than the pivot
+            if arr[j] <= pivot:
+                # increment the position of the last element that is smaller than the pivot
+                i = i + 1
+                # swap the current element with the position of the last element that is smaller than the pivot
+                arr[i], arr[j] = arr[j], arr[i]
+        # swap the pivot with the last element that is smaller than the pivot
+        arr[i], arr[low] = arr[low], arr[i]
+        # return the position of the pivot
+        return i
+
+    async def quick_sort_helper(arr: list, low: int, high: int):
+        # stop the recursion when the partition is of size 1 which means the array is sorted
+        if low < high:
+            # split the array into two parts and get the position where the array is split
+            pi = await partition(arr, low, high)
+            # sends the partitions to the client
+            await websocket.send(json.dumps({"message": f"array: {arr}, left partition: {arr[:pi]}, right partition: {arr[pi + 1:]}"}))
+            # recursively sort the left and right halves
+            await quick_sort_helper(arr, low, pi - 1)
+            await quick_sort_helper(arr, pi + 1, high)
+    # call the helper function for the entire array
+    await quick_sort_helper(arr, 0, len(arr) - 1)
 
 
 async def handler(websocket):
